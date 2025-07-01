@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polling and Survey App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1, h2, h3 {
+      text-align: center;
+    }
+    form {
+      margin-top: 20px;
+    }
+    .option {
+      margin: 10px 0;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+    }
+    .stats {
+      margin-top: 10px;
+    }
+    .thank-you {
+      text-align: center;
+      color: #28a745;
+      font-weight: bold;
+      display: none;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Survey: Favorite Programming Language</h1>
+    <p style="text-align:center">Help us understand popular coding trends among developers.</p>
+    <form id="pollForm">
+      <div class="option">
+        <input type="radio" name="language" value="Java" required /> Java
+      </div>
+      <div class="option">
+        <input type="radio" name="language" value="C" /> C
+      </div>
+      <div class="option">
+        <input type="radio" name="language" value="C++" /> C++
+      </div>
+      <div class="option">
+        <input type="radio" name="language" value="MySQL" /> MySQL
+      </div>
+      <div class="option">
+        <input type="radio" name="language" value="HTML & CSS" /> HTML & CSS
+      </div>
+      <button type="submit">Vote</button>
+    </form>
+    <p class="thank-you" id="thankYouMessage">Thank you for participating!</p>
+    <div class="result" id="result"></div>
+    <div class="stats" id="stats"></div>
+  </div>  <div class="footer">
+    <p>&copy; 2025 Polling & Survey App | Created by Chandreyi</p>
+  </div>  <script>
+    const pollForm = document.getElementById("pollForm");
+    const resultDiv = document.getElementById("result");
+    const thankYou = document.getElementById("thankYouMessage");
+    const statsDiv = document.getElementById("stats");
+
+    const votes = {
+      Java: 0,
+      C: 0,
+      "C++": 0,
+      MySQL: 0,
+      "HTML & CSS": 0
+    };
+
+    pollForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const formData = new FormData(pollForm);
+      const selected = formData.get("language");
+      if (votes[selected] !== undefined) {
+        votes[selected]++;
+      }
+      showResults();
+      showStats();
+      thankYou.style.display = "block";
+      pollForm.reset();
+    });
+
+    function showResults() {
+      let resultHTML = "<h3>Poll Results:</h3><ul>";
+      for (const lang in votes) {
+        resultHTML += <li>${lang}: ${votes[lang]} vote(s)</li>;
+      }
+      resultHTML += "</ul>";
+      resultDiv.innerHTML = resultHTML;
+    }
+
+    function showStats() {
+      let totalVotes = 0;
+      for (const count of Object.values(votes)) {
+        totalVotes += count;
+      }
+      let statHTML = <p><strong>Total Responses:</strong> ${totalVotes}</p>;
+      if (totalVotes > 0) {
+        statHTML += "<p><strong>Percentage Breakdown:</strong></p><ul>";
+        for (const lang in votes) {
+          const percent = ((votes[lang] / totalVotes) * 100).toFixed(1);
+          statHTML += <li>${lang}: ${percent}%</li>;
+        }
+        statHTML += "</ul>";
+      }
+      statsDiv.innerHTML = statHTML;
+    }
+  </script></body>
+</html>
